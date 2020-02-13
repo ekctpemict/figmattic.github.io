@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+</head>
+<body>
+
+<div id="app">
+
+    <ul>
+        <li v-on:click="changeDirection(); sorter('stars'); ">Rating </li>
+        <li v-on:click="changeDirection(); sorter('time');">Date</li>
+        <li><span>Sorting {{sorting.direction}}</span></li>
+    </ul>
+
+    <ul>
+        <li v-for="review in reviews" v-bind:class="review.stars">
+            {{review.name}} --  {{review.stars}} - {{review.time}}
+        </li>
+    </ul>
+
+    <button v-on:click="addMoreReviews()">Add More</button>
+
+
+</div>
+
+<script>
+    const reviews = [
+        {
+            name : 'Clair A. reviewed ',
+            domain : 'Masterpapers.com ',
+            link : '/reviews/masterpapers',
+            like : '<svg width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13 26c7.18 0 13-5.82 13-13S20.18 0 13 0 0 5.82 0 13s5.82 13 13 13z" fill="#04A081" fill-opacity=".8"/><path d="M9.03 17.58c0 .766-.139 1.388-.31 1.388H7.257c-.17 0-.309-.622-.309-1.388v-6.593c0-.767.138-1.388.309-1.388H8.72c.17 0 .308.621.308 1.388v6.593zM17.654 9.364h-1.78c.028-.111.045-.227.045-.347V6.588c0-.767-.622-1.388-1.388-1.388l-1.735 3.817c0 .12-3.123.968-3.123 1.735v6.593c0 .767.621 1.388 1.388 1.388h6.593c.767 0 1.388-.622 1.388-1.388v-6.593c0-.767-.622-1.388-1.388-1.388z" fill="#fff"/></svg>',
+            stars : '8',
+            rating : '8.2',
+            txt : 'I loved the essay and I got a B for it, the only comment I received from the instructor was that the background should be shorter and the Thesis should be longer... <a class="cards__green" href="/reviews/masterpapers">Show more</a>',
+            verify : 'Verified customer',
+            time : 'October 23, 2019'
+        },
+        {
+            name: 'Gabriel reviewed',
+            domain: 'Edubirdie.com',
+            link: '/reviews/edubirdie',
+            like: '<svg width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13 26c7.18 0 13-5.82 13-13S20.18 0 13 0 0 5.82 0 13s5.82 13 13 13z" fill="#E65353"/><path d="M9.03 8.687c0-.767-.139-1.388-.31-1.388H7.257c-.17 0-.309.621-.309 1.388v6.593c0 .767.138 1.388.309 1.388H8.72c.17 0 .308-.621.308-1.388V8.687zM17.654 16.903h-1.78c.028.11.045.227.045.347v2.429c0 .766-.622 1.388-1.388 1.388l-1.735-3.817c0-.12-3.123-.969-3.123-1.735V8.922c0-.767.621-1.388 1.388-1.388h6.593c.767 0 1.388.621 1.388 1.388v6.593c0 .766-.622 1.388-1.388 1.388z" fill="#fff"/></svg>',
+            stars: '4',
+            rating: '4.1',
+            txt: 'I was not happy with the writer because there were a lot of grammatical errors throughout the whole paper. I think any of the writers should have... <a class="cards__green" href="/reviews/edubirdie">Show more</a>',
+            verify: 'Verified customer',
+            time: 'October 23, 2019'
+        },
+        {
+            name : 'Stuart reviewed',
+            domain : 'Essaypro.com',
+            link : '/reviews/essaypro',
+            like : '<svg width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13 26c7.18 0 13-5.82 13-13S20.18 0 13 0 0 5.82 0 13s5.82 13 13 13z" fill="#04A081" fill-opacity=".8"/><path d="M9.03 17.58c0 .766-.139 1.388-.31 1.388H7.257c-.17 0-.309-.622-.309-1.388v-6.593c0-.767.138-1.388.309-1.388H8.72c.17 0 .308.621.308 1.388v6.593zM17.654 9.364h-1.78c.028-.111.045-.227.045-.347V6.588c0-.767-.622-1.388-1.388-1.388l-1.735 3.817c0 .12-3.123.968-3.123 1.735v6.593c0 .767.621 1.388 1.388 1.388h6.593c.767 0 1.388-.622 1.388-1.388v-6.593c0-.767-.622-1.388-1.388-1.388z" fill="#fff"/></svg>',
+            stars : '7',
+            rating : '7.0',
+            txt : 'I needed to edit a bit because the writing didn\'t appear to be from someone who spoke English as their first language. But overall ok.',
+            verify : 'Verified customer',
+            time : 'October 22, 2019'
+        },
+        {
+            name : 'Jasmine J. reviewed',
+            domain : 'Essaybox.org',
+            link : '/reviews/essaybox',
+            like : '<svg width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13 26c7.18 0 13-5.82 13-13S20.18 0 13 0 0 5.82 0 13s5.82 13 13 13z" fill="#E65353"/><path d="M9.03 8.687c0-.767-.139-1.388-.31-1.388H7.257c-.17 0-.309.621-.309 1.388v6.593c0 .767.138 1.388.309 1.388H8.72c.17 0 .308-.621.308-1.388V8.687zM17.654 16.903h-1.78c.028.11.045.227.045.347v2.429c0 .766-.622 1.388-1.388 1.388l-1.735-3.817c0-.12-3.123-.969-3.123-1.735V8.922c0-.767.621-1.388 1.388-1.388h6.593c.767 0 1.388.621 1.388 1.388v6.593c0 .766-.622 1.388-1.388 1.388z" fill="#fff"/></svg>',
+            stars : '3',
+            rating : '3.3',
+            txt : 'The writer didn\'t complete the order on time when i place the order. He delays maybe 15 hours and that have a negative impact to me. when i paid for the order... <a class="cards__green" href="/reviews/essaybox">Show more</a>',
+            verify : 'Verified customer',
+            time : 'October 21, 2019'
+        },
+        {
+            name : 'Kate C. reviewed ',
+            domain : 'Payforessay.net ',
+            link : '/reviews/payforessay',
+            like : '<svg width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13 26c7.18 0 13-5.82 13-13S20.18 0 13 0 0 5.82 0 13s5.82 13 13 13z" fill="#04A081" fill-opacity=".8"/><path d="M9.03 17.58c0 .766-.139 1.388-.31 1.388H7.257c-.17 0-.309-.622-.309-1.388v-6.593c0-.767.138-1.388.309-1.388H8.72c.17 0 .308.621.308 1.388v6.593zM17.654 9.364h-1.78c.028-.111.045-.227.045-.347V6.588c0-.767-.622-1.388-1.388-1.388l-1.735 3.817c0 .12-3.123.968-3.123 1.735v6.593c0 .767.621 1.388 1.388 1.388h6.593c.767 0 1.388-.622 1.388-1.388v-6.593c0-.767-.622-1.388-1.388-1.388z" fill="#fff"/></svg>',
+            stars : '7',
+            rating : '7.9',
+            txt : 'They weren\'t afraid to ask questions to verify what was needed.  Which is great because that made sure I got what I needed.',
+            verify : 'Verified customer',
+            time : 'October 21, 2019'
+        },
+        {
+            name : 'Bonnie R. reviewed',
+            domain : 'Grademiners.com',
+            link : '/reviews/grademiners',
+            like : '<svg width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13 26c7.18 0 13-5.82 13-13S20.18 0 13 0 0 5.82 0 13s5.82 13 13 13z" fill="#04A081" fill-opacity=".8"/><path d="M9.03 17.58c0 .766-.139 1.388-.31 1.388H7.257c-.17 0-.309-.622-.309-1.388v-6.593c0-.767.138-1.388.309-1.388H8.72c.17 0 .308.621.308 1.388v6.593zM17.654 9.364h-1.78c.028-.111.045-.227.045-.347V6.588c0-.767-.622-1.388-1.388-1.388l-1.735 3.817c0 .12-3.123.968-3.123 1.735v6.593c0 .767.621 1.388 1.388 1.388h6.593c.767 0 1.388-.622 1.388-1.388v-6.593c0-.767-.622-1.388-1.388-1.388z" fill="#fff"/></svg>',
+            stars : '8',
+            rating : '8.2',
+            txt : 'The essay was excellent, but I needed 250 words without a cover page, and asked for no direct quotes from the article.  I received a cover page and a direct quote.',
+            verify : 'Verified customer',
+            time : 'October 20, 2019'
+        },
+        {
+            name : 'Selma reviewed',
+            domain : 'Samedayessay.com',
+            link : '/reviews/samedayessay',
+            like : '<svg width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13 26c7.18 0 13-5.82 13-13S20.18 0 13 0 0 5.82 0 13s5.82 13 13 13z" fill="#04A081" fill-opacity=".8"/><path d="M9.03 17.58c0 .766-.139 1.388-.31 1.388H7.257c-.17 0-.309-.622-.309-1.388v-6.593c0-.767.138-1.388.309-1.388H8.72c.17 0 .308.621.308 1.388v6.593zM17.654 9.364h-1.78c.028-.111.045-.227.045-.347V6.588c0-.767-.622-1.388-1.388-1.388l-1.735 3.817c0 .12-3.123.968-3.123 1.735v6.593c0 .767.621 1.388 1.388 1.388h6.593c.767 0 1.388-.622 1.388-1.388v-6.593c0-.767-.622-1.388-1.388-1.388z" fill="#fff"/></svg>',
+            stars : '8',
+            rating : '8.0',
+            txt : 'This writer corrected issues that were requested and provided a good paper. I am pleased at how the reps assisted me with issues and concerns.',
+            verify : 'Verified customer',
+            time : 'October 20, 2019'
+        },
+        {
+            name : 'Charles reviewed',
+            domain : 'Essayshark.com',
+            link : '/reviews/essayshark',
+            like : '<svg width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13 26c7.18 0 13-5.82 13-13S20.18 0 13 0 0 5.82 0 13s5.82 13 13 13z" fill="#E65353"/><path d="M9.03 8.687c0-.767-.139-1.388-.31-1.388H7.257c-.17 0-.309.621-.309 1.388v6.593c0 .767.138 1.388.309 1.388H8.72c.17 0 .308-.621.308-1.388V8.687zM17.654 16.903h-1.78c.028.11.045.227.045.347v2.429c0 .766-.622 1.388-1.388 1.388l-1.735-3.817c0-.12-3.123-.969-3.123-1.735V8.922c0-.767.621-1.388 1.388-1.388h6.593c.767 0 1.388.621 1.388 1.388v6.593c0 .766-.622 1.388-1.388 1.388z" fill="#fff"/></svg>',
+            stars : '3',
+            rating : '2.8',
+            txt : 'While the writer is good at what he does, I wasn\'t necessarily pleased with the service. There were too many complications and too much money required in... <a class="cards__green" href="/reviews/essayshark">Show more</a>',
+            verify : 'Verified customer',
+            time : 'October 19, 2019'
+        },
+        {
+            name : 'Sebastian E. reviewed',
+            domain : 'Papernow.org',
+            link : '/reviews/papernow',
+            like : '<svg width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13 26c7.18 0 13-5.82 13-13S20.18 0 13 0 0 5.82 0 13s5.82 13 13 13z" fill="#04A081" fill-opacity=".8"/><path d="M9.03 17.58c0 .766-.139 1.388-.31 1.388H7.257c-.17 0-.309-.622-.309-1.388v-6.593c0-.767.138-1.388.309-1.388H8.72c.17 0 .308.621.308 1.388v6.593zM17.654 9.364h-1.78c.028-.111.045-.227.045-.347V6.588c0-.767-.622-1.388-1.388-1.388l-1.735 3.817c0 .12-3.123.968-3.123 1.735v6.593c0 .767.621 1.388 1.388 1.388h6.593c.767 0 1.388-.622 1.388-1.388v-6.593c0-.767-.622-1.388-1.388-1.388z" fill="#fff"/></svg>',
+            stars : '7',
+            rating : '9.2',
+            txt : 'Was SUUUUPER skeptical of this whole process, but everything turned out perfectly and it took a lot of stress off of my shoulders!! Super happy.',
+            verify : 'Verified customer',
+            time : 'October 19, 2019'
+        },
+        {
+            name : 'Wendy reviewed',
+            domain : 'Writemyessays.net',
+            link : '/reviews/writemyessays',
+            like : '<svg width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13 26c7.18 0 13-5.82 13-13S20.18 0 13 0 0 5.82 0 13s5.82 13 13 13z" fill="#E65353"/><path d="M9.03 8.687c0-.767-.139-1.388-.31-1.388H7.257c-.17 0-.309.621-.309 1.388v6.593c0 .767.138 1.388.309 1.388H8.72c.17 0 .308-.621.308-1.388V8.687zM17.654 16.903h-1.78c.028.11.045.227.045.347v2.429c0 .766-.622 1.388-1.388 1.388l-1.735-3.817c0-.12-3.123-.969-3.123-1.735V8.922c0-.767.621-1.388 1.388-1.388h6.593c.767 0 1.388.621 1.388 1.388v6.593c0 .766-.622 1.388-1.388 1.388z" fill="#fff"/></svg>',
+            stars : '4',
+            rating : '4.3',
+            txt : 'The paper had several mistakes, grammar errors and plagiarism issues. I spent hours fixing it, revising. The point was to get help so could trust the product... <a class="cards__green" href="/reviews/writemyessays">Show more</a>',
+            verify : 'Verified customer',
+            time : 'October 19, 2019'
+        },
+        {
+            name : 'Candace B. reviewed',
+            domain : 'Privatewriting.com',
+            link : '/reviews/privatewriting',
+            like : '<svg width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13 26c7.18 0 13-5.82 13-13S20.18 0 13 0 0 5.82 0 13s5.82 13 13 13z" fill="#04A081" fill-opacity=".8"/><path d="M9.03 17.58c0 .766-.139 1.388-.31 1.388H7.257c-.17 0-.309-.622-.309-1.388v-6.593c0-.767.138-1.388.309-1.388H8.72c.17 0 .308.621.308 1.388v6.593zM17.654 9.364h-1.78c.028-.111.045-.227.045-.347V6.588c0-.767-.622-1.388-1.388-1.388l-1.735 3.817c0 .12-3.123.968-3.123 1.735v6.593c0 .767.621 1.388 1.388 1.388h6.593c.767 0 1.388-.622 1.388-1.388v-6.593c0-.767-.622-1.388-1.388-1.388z" fill="#fff"/></svg>',
+            stars : '9',
+            rating : '9.5',
+            txt : 'This writer 140501 is a prefect and a nice writer I will use this writer for my other project soon. Highly recommend!',
+            verify : 'Verified customer',
+            time : 'October 18, 2019'
+        },
+        {
+            name : 'Isabel R. reviewed',
+            domain : 'Papersowl.com',
+            link : '/reviews/papersowl',
+            like : '<svg width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13 26c7.18 0 13-5.82 13-13S20.18 0 13 0 0 5.82 0 13s5.82 13 13 13z" fill="#E65353"/><path d="M9.03 8.687c0-.767-.139-1.388-.31-1.388H7.257c-.17 0-.309.621-.309 1.388v6.593c0 .767.138 1.388.309 1.388H8.72c.17 0 .308-.621.308-1.388V8.687zM17.654 16.903h-1.78c.028.11.045.227.045.347v2.429c0 .766-.622 1.388-1.388 1.388l-1.735-3.817c0-.12-3.123-.969-3.123-1.735V8.922c0-.767.621-1.388 1.388-1.388h6.593c.767 0 1.388.621 1.388 1.388v6.593c0 .766-.622 1.388-1.388 1.388z" fill="#fff"/></svg>',
+            stars : '3',
+            rating : '5.0',
+            txt : 'I received 40 out of 100 for the assignment. If instructions are actually read and followed, I doubt this would be the result.',
+            verify : 'Verified customer',
+            time : 'October 18, 2019'
+        },
+        {
+            name : 'Lee_30',
+            domain : 'Expertwriters.top',
+            link : '/reviews/expertwriters',
+            like : '<svg width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13 26c7.18 0 13-5.82 13-13S20.18 0 13 0 0 5.82 0 13s5.82 13 13 13z" fill="#04A081" fill-opacity=".8"/><path d="M9.03 17.58c0 .766-.139 1.388-.31 1.388H7.257c-.17 0-.309-.622-.309-1.388v-6.593c0-.767.138-1.388.309-1.388H8.72c.17 0 .308.621.308 1.388v6.593zM17.654 9.364h-1.78c.028-.111.045-.227.045-.347V6.588c0-.767-.622-1.388-1.388-1.388l-1.735 3.817c0 .12-3.123.968-3.123 1.735v6.593c0 .767.621 1.388 1.388 1.388h6.593c.767 0 1.388-.622 1.388-1.388v-6.593c0-.767-.622-1.388-1.388-1.388z" fill="#fff"/></svg>',
+            stars : '8',
+            rating : '9.5',
+            txt : 'I had limited time to complete my paper, and the whole staff and writers worked with me to get the perfect balance and outcome. Very impressed and worth it!',
+            verify : 'Verified customer',
+            time : 'October 17, 2019'
+        },
+        {
+            name : 'Erin P.',
+            domain : 'Helpinfb.com',
+            link : '/reviews/helpinfb',
+            like : '<svg width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13 26c7.18 0 13-5.82 13-13S20.18 0 13 0 0 5.82 0 13s5.82 13 13 13z" fill="#04A081" fill-opacity=".8"/><path d="M9.03 17.58c0 .766-.139 1.388-.31 1.388H7.257c-.17 0-.309-.622-.309-1.388v-6.593c0-.767.138-1.388.309-1.388H8.72c.17 0 .308.621.308 1.388v6.593zM17.654 9.364h-1.78c.028-.111.045-.227.045-.347V6.588c0-.767-.622-1.388-1.388-1.388l-1.735 3.817c0 .12-3.123.968-3.123 1.735v6.593c0 .767.621 1.388 1.388 1.388h6.593c.767 0 1.388-.622 1.388-1.388v-6.593c0-.767-.622-1.388-1.388-1.388z" fill="#fff"/></svg>',
+            stars : '8',
+            rating : '9.9',
+            txt : 'To be honest i was very nervous to purchase a paper here. I was thrilled that this paper passed and was completed quickly. The instructions were followed exactly. My grade was a 100% so I\'m extremely satisfied!',
+            verify : 'Verified customer',
+            time : 'October 18, 2019'
+        }
+    ];
+
+    let app = new Vue({
+        el: '#app',
+        data: {
+            portion: {
+                start: 0,
+                end: 3
+            },
+            sorting : {
+                method: 'stars',
+                direction: 'asc'
+            },
+            reviews: undefined
+        },
+        created() {
+            this.reviews = reviews;
+            this.sorter('stars');
+            this.reviews = reviews.slice(this.portion.start, this.portion.end)
+        },
+        methods: {
+            sorter: function (method) {
+                this.reviews = reviews;
+                if (method == 'stars') {
+                    if (this.sorting.direction == 'asc') {
+                        this.reviews = this.reviews.sort(function (a, b) {
+                            return b[method] - a[method]
+                        });
+                    } else {
+                        this.reviews = this.reviews.sort(function (a, b) {
+                            return a[method] - b[method]
+                        });
+                    }
+                } else if (method == 'time') {
+                    if (this.sorting.direction == 'asc') {
+                        this.reviews = this.reviews.sort(function (a, b) {
+                            return new Date(b[method]) - new Date(a[method])
+                        });
+                    } else {
+                        this.reviews = this.reviews.sort(function (a, b) {
+                            return new Date(a[method]) - new Date(b[method])
+                        });
+                    }
+                }
+                this.sliceReviews();
+          },
+            addMoreReviews() {
+                this.portion.end += 3;
+                this.sliceReviews();
+                this.sorter(this.sorting.method)
+            },
+            changeDirection: function () {
+                if (this.sorting.direction == 'asc') {
+                    this.sorting.direction = 'desc';
+                } else {
+                    this.sorting.direction = 'asc';
+                }
+            },
+            sliceReviews() {
+                this.reviews = reviews.slice(this.portion.start, this.portion.end)
+            },
+        }
+    })
+</script>
+
+</body>
+</html>
